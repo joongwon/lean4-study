@@ -1,4 +1,5 @@
 -- https://lean-lang.org/theorem_proving_in_lean4/quantifiers_and_equality.html
+-- 2025-02-18
 
 example (x y : Nat) : (x + y) * (x + y) = x * x + y * x + x * y + y * y :=
   have h1 : (x + y) * (x + y) = (x + y) * x + (x + y) * y :=
@@ -52,6 +53,8 @@ example : (∃ x, p x) ↔ ¬ (∀ x, ¬ p x) :=
       (fun h1 : ¬ (∃ x, p x) ↦
         have h2 : ∀ x, ¬ p x := fun x hpx ↦ h1 ⟨x, hpx⟩
         h h2)⟩
+
+-- 2025-02-19
 
 example : (¬ ∃ x, p x) ↔ (∀ x, ¬ p x) := sorry
 example : (¬ ∀ x, p x) ↔ (∃ x, ¬ p x) := sorry
