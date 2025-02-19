@@ -56,11 +56,35 @@ example : (∃ x, p x) ↔ ¬ (∀ x, ¬ p x) :=
 
 -- 2025-02-19
 
-example : (¬ ∃ x, p x) ↔ (∀ x, ¬ p x) := sorry
-example : (¬ ∀ x, p x) ↔ (∃ x, ¬ p x) := sorry
+example : (¬ ∃ x, p x) ↔ (∀ x, ¬ p x) :=
+  ⟨ λ (h : ¬∃x, p x) x hpx ↦ h ⟨x, hpx⟩,
+    λ (h : ∀x, ¬p x) ⟨x, px⟩ ↦ h x px ⟩
 
-example : (∀ x, p x → r) ↔ (∃ x, p x) → r := sorry
-example (a : α) : (∃ x, p x → r) ↔ (∀ x, p x) → r := sorry
-example (a : α) : (∃ x, r → p x) ↔ (r → ∃ x, p x) := sorry
+example : (¬ ∀ x, p x) ↔ (∃ x, ¬ p x) :=
+  ⟨ λ (hna : ¬∀x, p x) ↦ byContradiction 
+      (λ (he : ¬∃x, ¬p x) ↦
+        have ha : ∀x, p x := λx ↦ byContradiction (λhnpx ↦ he ⟨x, hnpx⟩)
+        hna ha),
+    λ ⟨x, hnpx⟩ hna ↦ hnpx (hna x) ⟩
+
+example : (∀ x, p x → r) ↔ (∃ x, p x) → r := 
+  ⟨ λh ⟨x, hpx⟩ ↦ h x hpx,
+    λh x hpx ↦ h ⟨x, hpx⟩ ⟩
+
+example (a : α) : (∃ x, p x → r) ↔ (∀ x, p x) → r :=
+  ⟨ λ ⟨x, h1⟩ (h2 : ∀x, p x) ↦ h1 (h2 x),
+    λ (h1 : (∀ x, p x) → r) ↦ byCases
+      (λ ⟨x, hnpx⟩ ↦ ⟨x, λhpx ↦ absurd hpx hnpx⟩)
+      (λ (h2 : ¬∃x, ¬p x) ↦
+        have h3 : ∀x, p x := λx ↦ byContradiction (λhnpx ↦ h2 ⟨x, hnpx⟩)
+        ⟨a, λ_ ↦ h1 h3⟩) ⟩
+
+example (a : α) : (∃ x, r → p x) ↔ (r → ∃ x, p x) :=
+  ⟨ λ⟨x, hrpx⟩ hr ↦ ⟨x, hrpx hr⟩,
+    λh ↦ byCases
+      (λ hr ↦
+        have ⟨x, hpx⟩ := h hr
+        ⟨x, λ_↦ hpx⟩)
+      (λ hnr ↦ ⟨a, λhr ↦ absurd hr hnr⟩) ⟩
 
 end MaybeClassical
