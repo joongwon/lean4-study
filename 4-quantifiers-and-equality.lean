@@ -90,3 +90,50 @@ example (a : α) : (∃ x, r → p x) ↔ (r → ∃ x, p x) :=
 end MaybeClassical
 
 -- 2025-02-20
+
+namespace Exercices1
+
+variable (α : Type) (p q : α → Prop)
+
+example : (∀ x, p x ∧ q x) ↔ (∀ x, p x) ∧ (∀ x, q x) :=
+  ⟨ λ h : ∀x, p x ∧ q x ↦
+      ⟨ λ a ↦ (h a).left, λ a ↦ (h a).right ⟩,
+    λ (⟨ h1, h2 ⟩ : (∀x, p x) ∧ (∀x, q x)) a ↦ ⟨ h1 a, h2 a ⟩ ⟩
+
+example : (∀ x, p x → q x) → (∀ x, p x) → (∀ x, q x) :=
+  λ h1 h2 a ↦ (h1 a) (h2 a)
+
+example : (∀ x, p x) ∨ (∀ x, q x) → ∀ x, p x ∨ q x :=
+  λ h a ↦ match h with
+    | Or.inl hp => Or.inl (hp a)
+    | Or.inr hq => Or.inr (hq a)
+
+end Exercices1
+
+namespace Exercises2
+
+variable (α : Type) (p q : α → Prop)
+variable (r : Prop)
+
+example : α → ((∀ x : α, r) ↔ r) :=
+  λ a ↦
+    ⟨ λ h ↦ h a,
+      λ hr _ ↦ hr ⟩
+
+example : (∀ x, p x ∨ r) ↔ (∀ x, p x) ∨ r :=
+  ⟨ λ h ↦ Classical.byCases
+      (λ hr ↦ Or.inr hr)
+      (λ hnr ↦
+        suffices ∀ x, p x from Or.inl this
+        λ a ↦ match h a with
+          | Or.inl hpa => hpa
+          | Or.inr hr => absurd hr hnr),
+    λ h a ↦ match h with
+      | Or.inl hp => Or.inl (hp a)
+      | Or.inr hr => Or.inr hr ⟩
+
+example : (∀ x, r → p x) ↔ (r → ∀ x, p x) :=
+  ⟨ λ h hr a ↦ h a hr,
+    λ h a hr ↦ h hr a ⟩
+
+end Exercises2
