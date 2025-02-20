@@ -88,3 +88,5 @@ example (a : α) : (∃ x, r → p x) ↔ (r → ∃ x, p x) :=
       (λ hnr ↦ ⟨a, λhr ↦ absurd hr hnr⟩) ⟩
 
 end MaybeClassical
+
+-- 2025-02-20
