@@ -61,13 +61,13 @@ example : (¬ ∃ x, p x) ↔ (∀ x, ¬ p x) :=
     λ (h : ∀x, ¬p x) ⟨x, px⟩ ↦ h x px ⟩
 
 example : (¬ ∀ x, p x) ↔ (∃ x, ¬ p x) :=
-  ⟨ λ (hna : ¬∀x, p x) ↦ byContradiction 
+  ⟨ λ (hna : ¬∀x, p x) ↦ byContradiction
       (λ (he : ¬∃x, ¬p x) ↦
         have ha : ∀x, p x := λx ↦ byContradiction (λhnpx ↦ he ⟨x, hnpx⟩)
         hna ha),
     λ ⟨x, hnpx⟩ hna ↦ hnpx (hna x) ⟩
 
-example : (∀ x, p x → r) ↔ (∃ x, p x) → r := 
+example : (∀ x, p x → r) ↔ (∃ x, p x) → r :=
   ⟨ λh ⟨x, hpx⟩ ↦ h x hpx,
     λh x hpx ↦ h ⟨x, hpx⟩ ⟩
 
@@ -137,3 +137,5 @@ example : (∀ x, r → p x) ↔ (r → ∀ x, p x) :=
     λ h a hr ↦ h hr a ⟩
 
 end Exercises2
+
+-- 2025-02-21
