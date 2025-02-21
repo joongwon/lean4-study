@@ -139,3 +139,36 @@ example : (∀ x, r → p x) ↔ (r → ∀ x, p x) :=
 end Exercises2
 
 -- 2025-02-21
+
+namespace Exercises3
+
+variable (men : Type) (barber : men)
+variable (shaves : men → men → Prop)
+
+example (h : ∀ x : men, shaves barber x ↔ ¬ shaves x x) : False :=
+  have hb : shaves barber barber ↔ ¬ shaves barber barber := h barber
+  have hns : ¬ shaves barber barber := λ hs ↦ hb.mp hs hs
+  have hs : shaves barber barber := hb.mpr hns
+  hns hs
+
+end Exercises3
+
+namespace Exercise4
+
+def even (n : Nat) : Prop := ∃ m, n = 2 * m
+
+def prime (n : Nat) : Prop := ∀ m k, n = m * k → m = 1 ∨ k = 1
+
+def infinitely_many_primes : Prop := ∀ n, ∃ p, p > n ∧ prime p
+
+def Fermat_prime (n : Nat) : Prop := ∃ m, n = 2^(2^n) + 1 ∧ prime m
+
+def infinitely_many_Fermat_primes : Prop := ∀ n, ∃ p, p > n ∧ Fermat_prime n
+
+def goldbach_conjecture : Prop := ∀ n, ¬ even n ∧ n > 2 → ∃ m k, m + k = n ∧ prime m ∧ prime k
+
+def Goldbach's_weak_conjecture : Prop := ∀ n, ¬ even n ∧ n > 7 → ∃ m k l, m + k + l = n ∧ prime m ∧ prime k ∧ prime l
+
+def Fermat's_last_theorem : Prop := ∀ n, n > 2 → ¬ ∃ (a b c : Nat), a > 0 ∧ b > 0 ∧ c > 0 ∧ a^n + b^n = c^n
+
+end Exercise4
